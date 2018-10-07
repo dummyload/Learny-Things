@@ -1,0 +1,6 @@
+# Vagrant crap
+.vagrant/
+
+
+# Other crud
+*.log
