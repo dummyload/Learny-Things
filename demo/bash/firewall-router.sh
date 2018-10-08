@@ -43,9 +43,9 @@ sed -i s'/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
 sysctl -p /etc/sysctl.conf
 
 
-iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-iptables -A FORWARD -i eth1 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
+iptables -t nat -A POSTROUTING -o enp0s8 -j MASQUERADE
+iptables -A FORWARD -i enp0s9 -o enp0s8 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i enp0s9 -o enp0s8 -j ACCEPT
 
 iptables-save > /etc/iptables.rules
 cat << EOF > /etc/network/if-pre-up.d/iptables
