@@ -6,7 +6,7 @@ sudo -s
 # remove the Vagrant default gateway...
 route del default gw 10.0.2.2
 # # add the local...
-route add default gw 192.168.100.254
+route add default gw 192.168.200.254
 
 
 # update and install ngnix
