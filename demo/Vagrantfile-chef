@@ -1,0 +1,41 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.box_version = "20181005.0.0"
+  # config.vm.box = "ubuntu/trusty64"
+  # config.vm.box_version = "20181002.0.0"
+
+  # doesn't need too much in the way of resources...
+  config.vm.provider :virtualbox do |v|
+    v.memory = 1024
+    v.cpus = 1
+    v.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
+  end
+
+  config.vm.provision "chef_solo" do |chef|
+    chef.cookbooks_path = "./chef/cookbooks"
+  end
+
+  config.vm.define :master do |master|
+    master.vm.hostname = "proxy-master-01"
+    master.vm.network "public_network", bridge: ["wlp2s0", "enp3s0f1"], :mac => "5CA1AB1E0001"
+    master.vm.network "private_network", ip: "192.168.200.254", virtualbox__intnet: "mynet"
+
+  end
+
+
+  web_servers = ["testing", "staging", "prod"]
+
+  (0...web_servers.length).each do |i|
+    config.vm.define "#{web_servers[i]}" do |server|
+
+      server.vm.hostname = web_servers[i]
+      # server.vm.network "public_network", bridge: ["wlp2s0", "enp3s0f1"]
+      server.vm.network "private_network", type: "dhcp",
+          :mac => "5CA1AB1E100#{i}", virtualbox__intnet: "mynet",
+          auto_config: false
+
+    end
+  end
+
+end
