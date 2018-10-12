@@ -1,0 +1,34 @@
+# option definitions common to all supported networks...
+option domain-name "test.cmdl.tech";
+option domain-name-servers 192.168.100.254;
+
+default-lease-time 3600;
+max-lease-time 7200;
+
+# If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+authoritative;
+
+subnet 192.168.200.0 netmask 255.255.255.0 {
+    option routers                192.168.200.254;
+    option subnet-mask            255.255.255.0;
+    option domain-search          "test.cmdl.tech";
+    option domain-name-servers    192.168.200.254;
+    range 192.168.200.50 192.168.200.59;
+}
+
+
+host testing {
+    hardware ethernet 5C:A1:AB:1E:10:00;
+    fixed-address 192.168.200.100;
+}
+
+host staging {
+    hardware ethernet 5C:A1:AB:1E:10:01;
+    fixed-address 192.168.200.101;
+}
+
+host prod {
+    hardware ethernet 5C:A1:AB:1E:10:02;
+    fixed-address 192.168.200.102;
+}
