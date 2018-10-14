@@ -1,3 +1,14 @@
+def provision_server(server, role)
+  server.vm.provision "chef_zero" do |chef|
+    chef.cookbooks_path = "./chef/cookbooks"
+    chef.roles_path = "./chef/roles"
+    chef.nodes_path = "./chef/nodes"
+
+    chef.add_role role
+  end
+end
+
+
 Vagrant.configure("2") do |config|
 
   # config.vm.box = "ubuntu/xenial64"
@@ -18,13 +29,7 @@ Vagrant.configure("2") do |config|
     master.vm.network "public_network", bridge: ["wlp2s0", "enp3s0f1"], :mac => "5CA1AB1E0001"
     master.vm.network "private_network", ip: "192.168.200.254", virtualbox__intnet: "mynet"
 
-    master.vm.provision "chef_zero" do |chef|
-      chef.cookbooks_path = "./chef/cookbooks"
-      chef.roles_path = "./chef/roles"
-      chef.nodes_path = "./chef/nodes"
-
-      chef.add_role "firewall"
-    end
+    provision_server(master, "firewall")
   end
 
 
@@ -39,6 +44,7 @@ Vagrant.configure("2") do |config|
           :mac => "5CA1AB1E100#{i}", virtualbox__intnet: "mynet",
           auto_config: false
 
+      provision_server(server, "web-server")
     end
   end
 
