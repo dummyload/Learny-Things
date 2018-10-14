@@ -1,0 +1,23 @@
+acl localnet {
+    192.168.100.0/24;
+    192.168.200.0/24;
+    localhost;
+};
+
+options {
+    directory "/var/cache/bind";
+
+    recursion yes;
+    allow-query  { localnet; };
+
+    forwarders {
+        192.168.100.254;
+        8.8.8.8;
+    };
+    forward only;
+
+    dnssec-validation auto;
+
+    auth-nxdomain no;    # conform to RFC1035
+    listen-on-v6 { any; };
+};

@@ -1,0 +1,17 @@
+; BIND reverse data file for 192.168.200.0/24
+;
+$TTL    604800
+@       IN      SOA     ns1.test.cmdl.tech. admin.test.cmdl.tech. (
+                              1         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      ns1.
+@       IN      NS      fw1.
+254     IN      PTR     ns1.test.cmdl.tech.
+254     IN      PTR     fw1.test.cmdl.tech.
+100     IN      PTR     testing.test.cmdl.tech.
+101     IN      PTR     staging.test.cmdl.tech.
+102     IN      PTR     prod.test.cmdl.tech.

@@ -9,11 +9,11 @@ end
 template '/etc/dhcp/dhcpd.conf.new' do
   source 'dhcp.erb'
   verify 'dhcpd -t -cf %{path}'
-  # verify '/bin/false'
 end
 
-file '/etc/dhcp/dhcpd.conf' do
-  content ::File.open("/etc/dhcp/dhcpd.conf.new").read
+remote_file '/etc/dhcp/dhcpd.conf' do
+  path '/etc/dhcp/dhcpd.conf'
+  source 'file:///etc/dhcp/dhcpd.conf.new'
 end
 
 service 'isc-dhcp-server' do
