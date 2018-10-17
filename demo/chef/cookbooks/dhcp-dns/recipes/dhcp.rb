@@ -3,7 +3,7 @@ apt_package 'isc-dhcp-server' do
 end
 
 file '/etc/default/isc-dhcp-server' do
-  content 'INTERFACES="enp0s9"'
+  content 'INTERFACES="eth2"'
 end
 
 template '/etc/dhcp/dhcpd.conf.new' do
