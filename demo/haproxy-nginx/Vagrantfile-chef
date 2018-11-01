@@ -1,0 +1,51 @@
+def provision_server(server, role)
+  server.vm.provision "chef_zero" do |chef|
+    chef.cookbooks_path = "./chef/cookbooks"
+    chef.roles_path = "./chef/roles"
+    chef.nodes_path = "./chef/nodes"
+
+    chef.add_role role
+  end
+end
+
+
+Vagrant.configure("2") do |config|
+
+  # config.vm.box = "ubuntu/xenial64"
+  # config.vm.box_version = "20181005.0.0"
+  config.vm.box = "bento/ubuntu-16.04"
+  config.vm.box_version = "201808.24.0"
+
+  # doesn't need too much in the way of resources...
+  config.vm.provider :virtualbox do |v|
+    v.memory = 1024
+    v.cpus = 1
+    v.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+  end
+
+  config.vm.define :master do |master|
+    master.vm.hostname = "proxy-master-01"
+    master.vm.network "public_network", bridge: ["wlp2s0", "enp3s0f1"], :mac => "5CA1AB1E0001"
+    master.vm.network "private_network", ip: "192.168.200.254", virtualbox__intnet: "mynet"
+
+    provision_server(master, "firewall")
+  end
+
+
+  web_servers = ["testing", "staging", "prod"]
+
+  (0...web_servers.length).each do |i|
+    config.vm.define "#{web_servers[i]}" do |server|
+
+      server.vm.hostname = web_servers[i]
+      # server.vm.network "public_network", bridge: ["wlp2s0", "enp3s0f1"]
+      server.vm.network "private_network", type: "dhcp",
+          :mac => "5CA1AB1E100#{i}", virtualbox__intnet: "mynet",
+          auto_config: false
+
+      provision_server(server, "web-server")
+    end
+  end
+
+end

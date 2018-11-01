@@ -1,0 +1,20 @@
+; BIND file for the test.cmdl.tech zone.
+;
+$TTL    86400
+@       IN      SOA     ns1.test.cmdl.tech. admin.test.cmdl.tech. (
+                             1         ; Serial
+                        604800         ; Refresh
+                         86400         ; Retry
+                       2419200         ; Expire
+                         86400 )       ; Negative Cache TTL
+;
+; Name servers
+@           IN      NS      ns1.test.cmdl.tech.
+@           IN      NS      fw1.test.cmdl.tech.
+ns1         IN      A       192.168.200.254
+fw1         IN      A       192.168.200.254
+
+; Web Servers
+testing     IN      A       192.168.200.100
+staging     IN      A       192.168.200.101
+prod        IN      A       192.168.200.102
