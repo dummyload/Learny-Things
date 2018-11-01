@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  redis-01:
+    build: .
+    image: my-redis:latest
+    networks:
+      front:
+        ipv4_address: 172.16.128.100
+    ports:
+    - 6379:6379
+    - 16379:16379
+
+networks:
+  front:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.128.0/24
+      # gateway: 172.16.128.1
