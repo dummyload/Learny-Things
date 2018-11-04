@@ -1,6 +1,6 @@
-FROM alpine:3.7
+FROM redis:alpine3.8
 
-RUN apk add --no-cache redis bash
+RUN apk add --no-cache bash
 
 ADD ./redis /redis
 

@@ -6,10 +6,28 @@ services:
     image: my-redis:latest
     networks:
       front:
-        ipv4_address: 172.16.128.100
-    ports:
-    - 6379:6379
-    - 16379:16379
+        ipv4_address: 172.16.128.101
+    # ports:
+    # - 6379:6379
+    # - 26379:26379
+    environment:
+    - MASTER=1
+
+  redis-02:
+    build: .
+    image: my-redis:latest
+    networks:
+      front:
+        ipv4_address: 172.16.128.102
+
+
+  redis-03:
+    build: .
+    image: my-redis:latest
+    networks:
+      front:
+        ipv4_address: 172.16.128.103
+
 
 networks:
   front:
