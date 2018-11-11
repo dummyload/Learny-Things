@@ -1,0 +1,29 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "bento/ubuntu-16.04"
+  config.vm.box_version = "201808.24.0"
+
+  config.vm.provider :virtualbox do |v|
+    v.memory = 1024
+    v.cpus = 1
+  end
+
+  (1..2).each do |i|
+    config.vm.define "dhcpd-#{i}" do |server|
+      server.vm.hostname = "dhcpd-#{i}"
+      server.vm.network "private_network", ip: "192.168.200.#{254 - i}", virtualbox__intnet: "mynet"
+
+      server.vm.provision "shell", path: "./bash/keepalived.sh"
+      server.vm.provision "shell", path: "./bash/dhcp-server.sh"
+    end
+  end
+
+  config.vm.define :desktop do |desk|
+    desk.vm.hostname = "desktop"
+
+    desk.vm.network "private_network", type: "dhcp",
+        virtualbox__intnet: "mynet",
+        auto_config: false
+  end
+
+end
